@@ -109,7 +109,6 @@ export default function App() {
         ) : (
           <CalendarCard
             month={months[index]}
-            months={months}
             total={total}
             labels={labels}
             index={index}

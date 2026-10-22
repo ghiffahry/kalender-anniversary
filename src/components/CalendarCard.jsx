@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import PhotoArt from './PhotoArt'
-import { NOTE_TABS } from './NotesPanel'
 import Pager from './Pager'
 import { WEEKDAYS_ID, formatDateID } from '../lib/calendar'
-import { LOCKED_LABEL, mediaOf } from '../data'
+import { LOCKED_LABEL, NOTE_TABS, mediaOf } from '../data'
 
 const ShuffleIcon = () => (
   <svg
@@ -25,7 +24,6 @@ const ShuffleIcon = () => (
 
 export default function CalendarCard({
   month,
-  months,
   total,
   labels,
   index,

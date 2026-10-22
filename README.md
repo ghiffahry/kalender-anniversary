@@ -1,97 +1,129 @@
-# Web Kalender: Satu Tahun Kita
+# Satu Tahun Kita
 
-Website hadiah ulang tahun ke-1, rentang 26 Oktober 2025 sampai 26 Oktober 2026.
-Kalender penuh layar, tiap tanggal bisa diklik dan menampilkan kenangan di header.
-Ada hitung mundur ke 26 Oktober 2026 00.00 WIB, dan saat jam nol muncul layar
-perayaan (bunga, confetti, ucapan).
+Kalender satu tahun, 26 Oktober 2025 sampai 26 Oktober 2026, untuk satu orang.
+Tiap tanggal bisa diklik dan menampilkan foto plus catatan di header. Di atas ada
+hitung mundur ke 26 Oktober 2026 00.00 WIB; saat jam nol muncul layar perayaan
+(amplop, surat, bunga, confetti).
 
-Stack: React 19 + Vite + Tailwind 4. Tanpa server, tanpa router, hasil build statis
-siap untuk GitHub Pages.
+Situs statis, tanpa server dan tanpa router. React 19, Vite 8, Tailwind 4.
 
-## Jalankan
+- Live: https://ghiffahry.github.io/kalender-anniversary/
+- Repo: https://github.com/ghiffahry/kalender-anniversary
+
+## Menjalankan
 
 ```bash
 npm install
-npm run dev
+npm run dev       # http://localhost:5173
+npm run build     # hasil di dist/
+npm run preview   # cek hasil build di http://localhost:4173
 ```
 
-Build produksi:
+## Isi berkas
+
+| Berkas | Isi |
+| --- | --- |
+| `src/data.js` | Semua teks: nama, ucapan, `MEDIA` (foto per tanggal), fakta, kuis, stiker |
+| `src/lib/calendar.js` | Rentang tanggal, epoch WIB, pembuat grid bulan, hitungan mundur |
+| `src/App.jsx` | State halaman, tanggal terpilih, panel, pemicu perayaan |
+| `src/components/` | Kalender, pager, panel catatan, hitung mundur, perayaan, ilustrasi SVG |
+| `public/foto/` | Foto yang tampil di situs, `YYYY-MM-DD.webp` |
+| `public/deco/` | Dua gambar stiker Bubu dudu |
+| `tools/import-foto.mjs` | Kompres dan beri nama foto sesuai tanggal |
+| `src/foto/` | Foto mentah. Tidak ikut repo, hanya bahan importer |
+
+## Mengubah isi
+
+Semua teks ada di `src/data.js`.
+
+- `NAME`: nama yang muncul di surat perayaan. Sekarang masih `Sayang`.
+- `GREETING`: judul, subjudul, isi surat, label tombol.
+- `MEDIA`: satu kunci per tanggal.
+  - `src`: `'foto/2026-05-17.webp'`. Tanpa garis miring di depan, karena situs
+    dilayani dari subfolder repo.
+  - `caption`: satu baris di header. Kalau kosong, header menulis
+    "Kenangan di tanggal ini."
+  - `note`: paragraf pendek di bawah caption, opsional.
+  - Tanggal tanpa `src` tetap bisa diklik, muncul ilustrasi dan teks
+    "Belum ada kenangan di tanggal ini."
+- `LOCKED`: tanggal yang ditutup sampai jam nol. Isinya sekarang `2026-10-26`.
+  Setelah lewat 26 Oktober 2026, tanggal itu otomatis terbuka sendiri.
+- `FACTS`: kartu di tab Fakta kita. Jumlah foto dihitung otomatis dari `MEDIA`.
+- `QUIZ`: pertanyaan, pilihan, indeks jawaban benar (mulai dari 0).
+- `BUBU_STICKERS`: dua gambar di tab Bubu dudu, berkasnya di `public/deco/`.
+
+Panel Catatan kecil dibuka lewat tiga chip di bawah kalender. Tutupnya lewat
+tombol X, tombol "Kembali ke kalender", atau Escape.
+
+## Foto
+
+Importer membaca `src/foto/`, lalu menulis `public/foto/` dalam ukuran maksimal
+1280px sisi panjang, kualitas webp 72, dan mencetak potongan `MEDIA` ke layar
+serta ke `tools/media-snippet.txt` (berkas ini tidak ikut repo).
 
 ```bash
-npm run build
-npm run preview
+node tools/import-foto.mjs --dry   # lihat rencana saja
+node tools/import-foto.mjs         # tulis hasilnya
 ```
 
-## Uji tampilan perayaan kapan saja
+Sumber tanggal dicoba berurutan:
 
-Buka dengan query `?celebrate=1`, misalnya `http://localhost:5173/?celebrate=1`.
-Saat asli, layar perayaan muncul sendiri begitu melewati 26 Okt 2026 00.00 WIB,
-sekali per perangkat (disimpan di localStorage).
+1. EXIF `DateTimeOriginal` atau `CreateDate`.
+2. `tools/foto-dates.csv`, format `file,tanggal,caption`.
+3. Nama file: `26 Oktober 2025.jpeg`, `2026-02-14.jpg`, `IMG_20260214_101500.jpg`.
 
-## Yang perlu diganti sebelum dikirim
+Nama yang mengandung "WhatsApp" selalu ditolak, karena jam di nama itu waktu
+simpan, bukan waktu foto diambil. HEIC dari iPhone tidak terbaca `sharp` di mesin
+ini; ekspor dulu ke JPEG.
 
-Semua di `src/data.js`:
+Satu tanggal satu foto. Foto kedua di hari yang sama tersimpan sebagai
+`YYYY-MM-DD-2.webp` tetapi tidak dipakai kalender.
 
-- `NAME`: nama penerima.
-- `GREETING`: judul, subjudul, isi pesan, label tombol.
-- `MEDIA`: caption dan kenangan per tanggal.
-  - `caption`: satu baris, tampil di header.
-  - `note`: paragraf surat pendek, muncul saat tanggal dipilih. Contoh sudah ada di 3 tanggal.
-  - `src`: foto asli, contoh `'2025-10-26': { caption: '...', src: 'foto/2025-10-26.jpg' }`.
-    Foto ditaruh di folder `public/`, tulis `foto/nama-file.jpg` tanpa garis miring di depan
-    supaya path tetap benar di GitHub Pages.
-    Selama `src` kosong, tampil ilustrasi dummy otomatis.
-- `LOCKED` dan `LOCKED_LABEL`: tanggal yang dibungkus sampai jam nol. Default 26 Oktober 2026.
-- `FACTS`: kartu fakta kecil di halaman Catatan kecil.
-- `QUIZ`: pertanyaan, pilihan, indeks jawaban benar.
-- `BUBU_STICKERS`: stiker dan keterangannya.
+Foto mentah di `src/foto/` masuk `.gitignore`. Yang naik ke repo hanya hasil
+kompres di `public/foto/`, sekarang 47 berkas, 3,83MB. Artinya semua foto itu
+bisa diunduh siapa pun yang punya URL situs.
 
-Halaman "Catatan kecil" bukan bagian deretan bulan. Pintu masuknya tiga chip di bawah
-kalender: Fakta kita, Masih ingat?, dan Bubu dudu. Chip langsung membuka panel
-di tab itu, tombol X atau "Kembali ke kalender" untuk menutup. Tombol Escape juga menutup.
+`tools/contact-sheet.mjs` membuat satu lembar kontak berisi semua foto mentah,
+berguna untuk memeriksa apakah tanggalnya sudah pas:
 
-Tab Bubu dudu berisi dua stiker dari berkas gambarmu sendiri (versi jalan-jalan dan
-bisik-bisik). Berkas taruh di `public/deco/`, lalu daftarkan di `BUBU_STICKERS`.
+```bash
+node tools/contact-sheet.mjs sheet.jpg
+```
 
-Tanggal yang belum ada di `MEDIA` tetap bisa diklik, hanya muncul teks
-"Belum ada kenangan di tanggal ini."
+## Waktu dan perayaan
 
-## Foto asli
+Target perayaan: 26 Oktober 2026 00.00 WIB, ditulis sebagai epoch UTC di
+`src/lib/calendar.js` (`ANNIV_TARGET`). Sebelum jam itu hitung mundur berjalan.
+Sesudahnya berubah jadi hitungan "sudah bersama".
 
-Alur cepat:
+Layar perayaan muncul sendiri sekali per perangkat, ditandai
+`localStorage['satu-tahun-celebrated']`. Untuk menguji tanpa menunggu:
 
-1. Taruh file foto di `src/foto/`. Nama file sebaiknya mengandung tanggal, mis.
-   `26 Oktober 2025.jpeg`, `IMG_20260214_101500.jpg`, atau `2026-02-14.jpg`.
-2. `node tools/import-foto.mjs` (tambah `--dry` untuk lihat rencana saja).
-   Hasil: `public/foto/YYYY-MM-DD.webp`, maks 1280px pada sisi panjang, kualitas 72,
-   plus `tools/media-snippet.txt`.
-3. Tempel isi snippet ke `MEDIA` di `src/data.js`.
+- Buka `?celebrate=1`, misalnya `http://localhost:5173/?celebrate=1`.
+- Untuk mengulang uji setelah ditutup, hapus kunci itu di DevTools:
+  `localStorage.removeItem('satu-tahun-celebrated')`.
 
-Urutan sumber tanggal: EXIF `DateTimeOriginal`, lalu `tools/foto-dates.csv`, lalu nama file.
-Nama yang mengandung "WhatsApp" selalu ditolak, karena itu waktu simpan, bukan waktu foto.
-Kalau semua nama file sudah mengandung tanggal, CSV tidak perlu diisi.
+## Deploy
 
-Satu tanggal satu foto. Foto kedua di hari yang sama ikut tersimpan sebagai `YYYY-MM-DD-2.webp`
-tapi belum dipakai kalender, karena `MEDIA` satu entri per tanggal.
+Hosting di GitHub Pages lewat `.github/workflows/deploy.yml`. Setiap push ke
+`main` menjalankan build lalu menerbitkan `dist/`.
 
-HEIC dari iPhone tidak bisa dibaca sharp di mesin ini. Ekspor dulu ke JPEG.
+Setelan sekali pasang: repo > Settings > Pages > Source: **GitHub Actions**.
+Jangan pilih "Deploy from a branch".
 
-`src/foto/` sudah masuk `.gitignore`, jadi yang ikut ke repo hanya hasil kompres di `public/foto/`.
-Kalau mau foto mentahnya ikut tersimpan di GitHub, hapus baris itu dari `.gitignore`.
+`vite.config.js` memakai `base: './'`, jadi aman di subfolder repo mana pun.
 
-## Deploy ke GitHub Pages
+## Yang belum selesai
 
-Repo sudah menyertakan `.github/workflows/deploy.yml`.
+- 46 dari 47 tanggal berfoto belum punya caption, jadi hampir semua hanya menampilkan
+  "Kenangan di tanggal ini."
+- Belum diuji di iPhone Safari, baru Chrome mobile dan desktop.
+- Beberapa sumber foto hanya 720x1280 karena kompresi WhatsApp. Yang paling
+  lemah 19 Mei 2026 (591x1280).
+- Meta `noindex` mencegah mesin pencari mengindeks, bukan mencegah orang membuka.
+  Jangan taruh teks yang tidak nyaman dibaca orang lain.
 
-1. Buat repo publik (tunggu sampai hari kirim supaya tidak jadi spoiler).
-2. Push ke branch `main`.
-3. Di GitHub: Settings > Pages > Source: GitHub Actions.
-4. Selesai. URL berbentuk `https://username.github.io/nama-repo/`.
+## Catatan lama
 
-`vite.config.js` memakai `base: './'` sehingga aman di subfolder repo mana pun.
-
-## Catatan privasi
-
-Repo publik berarti kode dan isinya publik ke siapa pun yang punya link.
-Sudah dipasang meta `noindex` agar tidak diindeks mesin pencari, tapi itu bukan
-kunci. Jangan taruh teks atau file yang tidak nyaman dibaca orang lain.
+Foto mentah punya nama asli, termasuk dua salah tulis yang tidak memengaruhi
+hasil: `29 Agusrus 2026.jpeg` dan `10 Januai 2026.jpeg`.

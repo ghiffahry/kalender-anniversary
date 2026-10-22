@@ -1,5 +1,6 @@
-// Contact sheet of every photo in src/foto, row-major, same order as file listing.
-// Temporary tool, safe to delete.
+// Membuat satu lembar kontak berisi semua foto di src/foto, urut nama berkas.
+// Dipakai untuk memeriksa apakah pembagian tanggal per foto sudah benar.
+// Gagal kalau ada HEIC di folder itu; pindahkan dulu berkasnya.
 import { readdir } from 'node:fs/promises'
 import path from 'node:path'
 import sharp from 'sharp'

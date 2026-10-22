@@ -17,16 +17,12 @@ export const GREETING = {
 export const LOCKED = ['2026-10-26']
 export const LOCKED_LABEL = 'Terbungkus rapi, dibuka 26 Oktober 2026.'
 
-// Satu tanggal satu kenangan. 47 foto asli sudah masuk di tanggal masing-masing.
+// Satu tanggal satu kenangan.
 // caption  : satu baris singkat, tampil di header. Kalau kosong, header menulis
 //            "Kenangan di tanggal ini." sampai kamu isi.
-// note     : paragraf panjang, muncul saat tanggal dipilih (opsional). Contoh ada di 2 tanggal.
-// src      : foto asli di public/foto, tulis 'foto/nama-file.webp' tanpa garis miring
+// note     : paragraf pendek, muncul saat tanggal dipilih (opsional).
+// src      : foto di public/foto, tulis 'foto/nama-file.webp' tanpa garis miring
 //            di depan, supaya tetap benar di GitHub Pages.
-//
-// Catatan lama berbasis tanggal bulan ke-N (26 November, 26 Desember, dan seterusnya)
-// dihapus karena tanggalnya karangan. Kalau mau dikembalikan sebagai penanda bulan,
-// tinggal ditambah lagi di bawah.
 export const MEDIA = {
   '2025-10-26': {
     caption: 'Hari pertama cerita kita.',
@@ -85,7 +81,15 @@ export const MEDIA = {
   },
 }
 
+export const NOTE_TABS = [
+  { id: 'fakta', label: 'Fakta kita' },
+  { id: 'kuis', label: 'Masih ingat?' },
+  { id: 'bubu', label: 'Bubu dudu' },
+]
+
 export const mediaOf = (key) => MEDIA[key] ?? null
+
+const photoCount = Object.keys(MEDIA).filter((k) => MEDIA[k].src).length
 
 // Fakta kecil. Angka dan label bebas. Satu kartu = satu fakta.
 export const FACTS = [
@@ -95,7 +99,7 @@ export const FACTS = [
   { label: 'Makanan paling sering dimakan', value: 'Bebek' },
   { label: 'Tempat paling sering dikunjungi', value: 'Masjid As-Sophia' },
   { label: 'Karakter kesukaan', value: 'Bubu dudu' },
-  { label: 'Foto di kalender ini', value: '47' },
+  { label: 'Foto di kalender ini', value: photoCount },
   { label: 'Foto di galeri', value: '600+' },
 ]
 
@@ -117,8 +121,6 @@ export const QUIZ = [
     answer: 1,
   },
 ]
-
-// Tiga slot foto gundam dihapus atas permintaan.
 
 // Dua stiker dari file gambarmu di public/deco. Untuk menambah, taruh berkasnya
 // di sana lalu tambah satu entri dengan src yang sesuai.

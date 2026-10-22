@@ -7,3 +7,6 @@ dist
 # Hapus baris ini kalau memang mau file aslinya ikut tersimpan di GitHub.
 src/foto/
 
+# Hasil importer, dibuat ulang tiap kali skrip dijalankan.
+tools/media-snippet.txt
+

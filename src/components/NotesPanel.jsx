@@ -1,13 +1,7 @@
 import PhotoArt from './PhotoArt'
 import { useState } from 'react'
 import { STORY_START, breakdown } from '../lib/calendar'
-import { BUBU_STICKERS, FACTS, QUIZ } from '../data'
-
-export const NOTE_TABS = [
-  { id: 'fakta', label: 'Fakta kita' },
-  { id: 'kuis', label: 'Masih ingat?' },
-  { id: 'bubu', label: 'Bubu dudu' },
-]
+import { BUBU_STICKERS, FACTS, NOTE_TABS, QUIZ } from '../data'
 
 const XIcon = () => (
   <svg
