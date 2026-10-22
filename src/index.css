@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fraunces", "Georgia", serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --color-cream: #fff6ee;
+  --color-ink: #3d2b33;
+  --color-rose: #e85d75;
+  --color-blush: #ffd3e0;
+  --color-plum: #6c4a8f;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background-color: var(--color-cream);
+  background-image:
+    radial-gradient(1100px 700px at 8% -10%, #ffe3ec 0%, transparent 60%),
+    radial-gradient(900px 700px at 100% 15%, #efe0ff 0%, transparent 55%),
+    radial-gradient(900px 600px at 50% 110%, #ffefd4 0%, transparent 60%);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+/* Animasi masuk untuk gambar header */
+@keyframes fade-zoom {
+  from {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-in {
+  animation: fade-zoom 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* Animasi tombol tanggal terpilih */
+@keyframes pop {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-pop {
+  animation: pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Surat keluar dari amplop */
+@keyframes letter-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-letter {
+  animation: letter-in 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* Kelopak bunga di layar perayaan */
+@keyframes fall {
+  to {
+    transform: translateY(118vh) rotate(340deg);
+  }
+}
+
+.petal {
+  position: absolute;
+  top: -6vh;
+  display: block;
+  border-radius: 62% 38% 60% 40% / 55% 45% 62% 38%;
+  background: linear-gradient(140deg, #ffb3c2, #e85d75);
+  opacity: 0.85;
+  animation: fall linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

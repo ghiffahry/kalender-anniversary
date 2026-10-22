@@ -1,0 +1,9 @@
+node_modules
+dist
+.DS_Store
+*.local
+
+# Foto mentah. Hasil kompres sudah ada di public/foto, jadi mentahnya tidak ikut ke repo.
+# Hapus baris ini kalau memang mau file aslinya ikut tersimpan di GitHub.
+src/foto/
+
